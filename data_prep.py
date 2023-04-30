@@ -1,102 +1,114 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[33]:
+# In[74]:
 
 
 import pandas as pd
 
 
-# In[34]:
+# In[75]:
 
 
 women_data = pd.read_csv('API_SE.PRM.CMPT.FE.ZS_DS2_en_csv_v2_5359531.csv', skiprows=3)
 
 
-# In[35]:
+# In[76]:
 
 
 women_data.head(3)
 
 
-# In[36]:
+# In[77]:
 
 
 women_data = women_data.drop(['Indicator Name', 'Indicator Code', 'Unnamed: 66'], axis=1)
 
 
-# In[37]:
+# In[78]:
 
 
 women_data = women_data.melt(id_vars=['Country Name', 'Country Code'])
 women_data.columns = ['Country Name', 'Country Code', 'year', 'percentage']
 
 
-# In[38]:
+# In[79]:
 
 
 women_data
 
 
-# In[39]:
+# In[80]:
 
 
 len(women_data)
 
 
-# In[40]:
+# In[81]:
 
 
 women_data_metadata = pd.read_csv('Metadata_Country_API_SE.PRM.CMPT.FE.ZS_DS2_en_csv_v2_5359531.csv')
 
 
-# In[41]:
+# In[82]:
 
 
 women_data_metadata
 
 
-# In[42]:
+# In[83]:
 
 
 women_data = women_data.merge(women_data_metadata, on=['Country Code'], how='left')
 
 
-# In[43]:
+# In[84]:
 
 
 women_data
 
 
-# In[29]:
+# In[85]:
 
 
 # Drop rows where percentage is missing for country.  
 
 
-# In[46]:
+# In[86]:
 
 
 women_data = women_data.dropna(subset=['percentage'])
 
 
-# In[49]:
+# In[87]:
 
 
 women_data['IncomeGroup'] = women_data['IncomeGroup'].fillna('OTHER')
 
 
-# In[51]:
+# In[88]:
 
 
 women_data['Region'] = women_data['Region'].fillna('OTHER')
 
 
-# In[72]:
+# In[89]:
+
+
+women_data
+
+
+# In[92]:
 
 
 # Save women Primary completion rate date. 
-women_data.to_csv('women_clean_data.csv')
+women_data[['Country Name', 
+            'Country Code',
+            'year',
+            'percentage',
+            'Region',
+            'IncomeGroup'
+           ]].to_csv('women_education_clean_data.csv')
 
 
 # In[54]:
@@ -174,10 +186,22 @@ child_data['Region'] = child_data['Region'].fillna('OTHER')
 child_data
 
 
-# In[71]:
+# In[91]:
 
 
-child_data.to_csv('child_clean_data.csv')
+child_data[['Country Name', 
+            'Country Code',
+            'year',
+            'percentage',
+            'Region',
+            'IncomeGroup'
+           ]].to_csv('child_mortality_clean_data.csv')
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
